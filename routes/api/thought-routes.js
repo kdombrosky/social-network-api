@@ -18,9 +18,9 @@ router
     .post(createThought);
 
 
-// GET, PUT, DELETE routes for /api/thoughts/:id
+// GET, PUT, DELETE routes for /api/thoughts/:thoughtId
 router
-    .route('/:id')
+    .route('/:thoughtId')
     .get(getThoughtById)
     // .put(updateThought)
     .delete(removeThought)

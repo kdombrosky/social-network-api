@@ -20,6 +20,6 @@
   "homepage": "https://github.com/kdombrosky/social-network-api#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "mongoose": "^6.0.2"
+    "mongoose": "^5.13.7"
   }
 }

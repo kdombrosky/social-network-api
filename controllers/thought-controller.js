@@ -31,10 +31,10 @@ const thoughtController = {
     createThought({ params, body }, res) {
         console.log(body);
         Thought.create(body)
-        .then(({ _id }) => {
+        .then(({ username }) => {
             // return User Promise so we can do something with the results
             return User.findOneAndUpdate(
-                { _id: params.userId },
+                { username: params.username },
                 // push Thought's id to user's thoughts array
                 { $push: { thoughts: _id } },
                 // to receive back the updated User with new comment
@@ -75,7 +75,7 @@ const thoughtController = {
 
 
 
-    // DELETE thought by id  /api/thoughts/:id
+    // DELETE thought by id  /api/thoughts/:thoughtId
     removeThought({ params }, res) {
         Thought.findOneAndDelete({ _id: params.thoughtId })
         .then(deletedThought => {
@@ -84,7 +84,7 @@ const thoughtController = {
             }
             // return User Promise so we can do something with the results
             return User.findOneAndUpdate(
-                { _id: params.userId },
+                { username: params.username },
                 // Mongo $pull method to remove thought from associated array
                 { $pull: { thoughts: params.thoughtId } },
                 { new: true }
@@ -92,7 +92,7 @@ const thoughtController = {
         })
         .then(dbUserData => {
             if (!dbUserData) {
-                res.status(404).json({ message: 'No user found with this id!' });
+                res.status(404).json({ message: 'No user found with this username!' });
                 return;
             }
             res.json(dbUserData);

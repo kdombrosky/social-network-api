@@ -52,6 +52,7 @@ const userController = {
 
 
     // UPDATE user by id  /api/users/:id
+    // update thoughts as well? 
     updateUser({ params, body }, res) {
         User.findOneAndUpdate({ _id: params.id }, body, { new: true })
         .then(dbUserData => {
