@@ -2,9 +2,9 @@
 //     getAllThought, (DONE)
 //     getThoughtById, (DONE)
 //     createThought, (DONE)
-//     updateThought,
-//     removeThought, (DONE)
-//     createReaction, (DONE)
+//     updateThought, (DONE? )
+//     deleteThought, (DONE)
+//     addReaction, (DONE)
 //     removeReaction (DONE)
 // } 
 
@@ -52,9 +52,9 @@ const thoughtController = {
     },
 
 
-    // GET thought by id /api/thoughts/:id
+    // GET thought by id /api/thoughts/:thoughtId
     getThoughtById({ params }, res) {
-        Thought.findOne({ _id: params.id })
+        Thought.findOne({ _id: params.thoughtId })
         .select('-__v')
         .then(dbThoughtData => {
             if (!dbThoughtData) {
@@ -70,13 +70,29 @@ const thoughtController = {
     },
 
 
-    // UPDATE thought by id /api/thoughts/:id
-    // updateThought()
-
+    // UPDATE thought by id /api/thoughts/:thoughtId
+    updateThought({ params, body }, res) {
+        Thought.findOneAndUpdate(
+            { _id: params.thoughtId },
+            body,
+            { new: true }
+        )
+        .then(dbThoughtData => {
+            if (!dbThoughtData) {
+                res.status(404).json({ message: 'No thought found with this id' });
+                return;
+            }
+            res.json(dbThoughtData);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(400).json(err);
+        });
+    },
 
 
     // DELETE thought by id  /api/thoughts/:thoughtId
-    removeThought({ params }, res) {
+    deleteThought({ params }, res) {
         Thought.findOneAndDelete({ _id: params.thoughtId })
         .then(deletedThought => {
             if (!deletedThought) {
@@ -84,7 +100,7 @@ const thoughtController = {
             }
             // return User Promise so we can do something with the results
             return User.findOneAndUpdate(
-                { username: params.username },
+                { username: deletedThought.username },
                 // Mongo $pull method to remove thought from associated array
                 { $pull: { thoughts: params.thoughtId } },
                 { new: true }
@@ -102,7 +118,7 @@ const thoughtController = {
 
 
     // CREATE new reaction /api/thoughts/:thoughtId/reactions
-    createReaction({ params, body }, res) {
+    addReaction({ params, body }, res) {
         Thought.findOneAndUpdate(
             { _id: params.thoughtId },
             // Mongo $push method to push reaction into reactions array property of thought
@@ -121,11 +137,11 @@ const thoughtController = {
 
 
     // DELETE reaction /api/thoughts/:thoughtId/reactions
-    removeReaction({ params }, res) {
+    removeReaction({ params, body }, res) {
         Thought.findOneAndUpdate(
             { _id: params.thoughtId },
             // MongoDB $pull operator to remove specific reaction from reactions array
-            { $pull: { reactions: { reactionId: params.reactionId } } },
+            { $pull: { reactions: { reactionId: body.reactionId } } },
             { new: true }
         )
         .then(dbThoughtData => res.json(dbThoughtData))
