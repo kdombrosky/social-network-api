@@ -2,14 +2,14 @@
 
 ## Description 
 This is the back-end for a social networking app, made with NoSQL and MongoDB. This will allow users to perform all the neccessary functions of any social media: 
-    - Create / Delete Thoughts
-    - Create / Delete Users 
-    - Update Thoughts
-    - Update Users
-    - Add / Remove Reactions 
-    - Add / Remove Friends
-    - See all Users 
-    - See all Thoughts
+- Create / Delete Thoughts
+- Create / Delete Users 
+- Update Thoughts
+- Update Users
+- Add / Remove Reactions 
+- Add / Remove Friends
+- See all Users 
+- See all Thoughts
 <br/>
 Link to walkthrough: 
 <br/><br/>
