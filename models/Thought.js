@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, Types } = require('mongoose');
 // import date format 
 
 const ReactionSchema = new Schema(
@@ -24,7 +24,7 @@ const ReactionSchema = new Schema(
     },
     {
         toJSON: {
-            getters: true
+            // getters: true
         }
     }
 );
@@ -53,7 +53,7 @@ const ThoughtSchema = new Schema(
     {
         toJSON: {
             virtuals: true,
-            getters: true
+            // getters: true
         },
         id: false
     }

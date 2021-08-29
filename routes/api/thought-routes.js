@@ -4,7 +4,7 @@ const {
     getAllThought,
     createThought,
     getThoughtById,
-    updateThought,
+    // updateThought,
     removeThought,
     createReaction,
     removeReaction
@@ -22,7 +22,7 @@ router
 router
     .route('/:id')
     .get(getThoughtById)
-    .put(updateThought)
+    // .put(updateThought)
     .delete(removeThought)
 
 

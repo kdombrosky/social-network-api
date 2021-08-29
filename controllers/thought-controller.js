@@ -4,15 +4,15 @@
 //     createThought, (DONE)
 //     updateThought,
 //     removeThought, (DONE)
-//     createReaction,
-//     removeReaction
+//     createReaction, (DONE)
+//     removeReaction (DONE)
 // } 
 
-const { Thought } = require('../models');
+const { Thought, User } = require('../models');
 
 
 const thoughtController = {
-    // GET all Thoughts
+    // GET all thoughts /api/thoughts
     getAllThought(req, res) {
         Thought.find({})
         .select('-__v')
@@ -27,25 +27,7 @@ const thoughtController = {
     },
 
 
-    // GET thought by id
-    getThoughtById({ params }, res) {
-        Thought.findOne({ _id: params.id })
-        .select('-__v')
-        .then(dbThoughtData => {
-            if (!dbThoughtData) {
-                res.status(404).json({ message: 'No Thought found with this id' });
-                return;
-            }
-            res.json(dbThoughtData);
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(400).json(err);
-        });
-    },
-
-
-    // CREATE new thought 
+    // CREATE new thought  /api/thoughts
     createThought({ params, body }, res) {
         console.log(body);
         Thought.create(body)
@@ -70,12 +52,30 @@ const thoughtController = {
     },
 
 
-    // UPDATE thought by id
+    // GET thought by id /api/thoughts/:id
+    getThoughtById({ params }, res) {
+        Thought.findOne({ _id: params.id })
+        .select('-__v')
+        .then(dbThoughtData => {
+            if (!dbThoughtData) {
+                res.status(404).json({ message: 'No Thought found with this id' });
+                return;
+            }
+            res.json(dbThoughtData);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(400).json(err);
+        });
+    },
+
+
+    // UPDATE thought by id /api/thoughts/:id
     // updateThought()
 
 
 
-    // DELETE thought by id 
+    // DELETE thought by id  /api/thoughts/:id
     removeThought({ params }, res) {
         Thought.findOneAndDelete({ _id: params.thoughtId })
         .then(deletedThought => {
@@ -101,7 +101,7 @@ const thoughtController = {
     },
 
 
-    // CREATE new reaction
+    // CREATE new reaction /api/thoughts/:thoughtId/reactions
     createReaction({ params, body }, res) {
         Thought.findOneAndUpdate(
             { _id: params.thoughtId },
@@ -120,7 +120,7 @@ const thoughtController = {
     },
 
 
-    // DELETE reaction
+    // DELETE reaction /api/thoughts/:thoughtId/reactions
     removeReaction({ params }, res) {
         Thought.findOneAndUpdate(
             { _id: params.thoughtId },
