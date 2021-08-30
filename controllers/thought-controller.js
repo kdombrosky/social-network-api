@@ -144,7 +144,6 @@ const thoughtController = {
     // DELETE reaction /api/thoughts/:thoughtId/reactions
     // Expects:
     // {
-    //     Must match "reactionId" of reaction, not objectId
     //     "reactionId": "612d3bc1a3bd2b9734711878"
     // }
     removeReaction({ params, body }, res) {

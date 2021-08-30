@@ -22,15 +22,28 @@ router
 router
     .route('/:thoughtId')
     .get(getThoughtById)
+    // updateThought JSON:
+    // {
+    //     "thoughtText": ""
+    //     "username": ""
+    // }
     .put(updateThought)
     .delete(deleteThought)
 
 
 // POST, DELETE routes for /api/thoughts/:thoughtId/reactions
-// to add or remove a reaction on a thought
 router  
     .route('/:thoughtId/reactions')
+    // addReaction JSON:
+    // {
+    //     "reactionBody": "",
+    //     "username": ""
+    // }
     .post(addReaction)
+    // removeReaction JSON: 
+    // {
+    //     "reactionId": "612d3bc1a3bd2b9734711878"
+    // }
     .delete(removeReaction);
 
 module.exports = router;
