@@ -19,7 +19,6 @@ This is the back-end for a social networking app, made with NoSQL and MongoDB. T
 - Add / Remove Reactions 
 - See all Thoughts
 - See all Users 
-<br/>
 
 ## Installation 
 1. Clone the repo 
