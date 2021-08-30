@@ -5,7 +5,7 @@
 //     updateThought, (TESTED)
 //     deleteThought, (TESTED)
 //     addReaction, (TESTED)
-//     removeReaction (TESTED)
+//     removeReaction (NO LONGER WORKING)
 // } 
 
 const { Thought, User } = require('../models');
@@ -15,10 +15,6 @@ const thoughtController = {
     // GET all thoughts /api/thoughts
     getAllThought(req, res) {
         Thought.find({})
-        .populate({
-            path: 'reactions',
-            select: '-__v'
-        })
         .select('-__v')
         // Mongoose sort method in DESC order by id
         // need to sort by created at 
@@ -65,10 +61,6 @@ const thoughtController = {
     getThoughtById({ params }, res) {
         Thought.findOne({ _id: params.thoughtId })
         .select('-__v')
-        .populate({
-            path: 'reactions',
-            select: '-__v'
-        })
         .then(dbThoughtData => {
             if (!dbThoughtData) {
                 res.status(404).json({ message: 'No thought found with this id' });

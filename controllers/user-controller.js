@@ -85,6 +85,8 @@ const userController = {
     deleteUser({ params }, res) {
         User.findOneAndDelete({ _id: params.id })
         .then(dbUserData => res.json(dbUserData))
+        // receives back "username", "thoughts" array, 
+        // can delete associated thoughts, and 
         .catch(err => res.status(400).json(err));
     },
 
@@ -126,7 +128,7 @@ const userController = {
 
 
     // DELETE friend from user by id  /api/users/:userId/friends/:friendId
-    removeFriend({ params }, res) {
+    deleteFriend({ params }, res) {
         // remove friendId from user's 'friends' array
         User.findOneAndUpdate(
             { _id: params.userId },
@@ -143,7 +145,7 @@ const userController = {
             User.findOneAndUpdate(
                 // can i use params or does it have to come from dbUserData
                 { _id: params.friendId },
-                { $push: { friends: params.userId } },
+                { $pull: { friends: params.userId } },
                 { new: true, runValidators: true }
             )
             .then(dbFriendData => {
