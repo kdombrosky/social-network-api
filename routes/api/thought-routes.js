@@ -1,13 +1,12 @@
 const router = require('express').Router();
-// destructure methods from thought controller object 
 const {
     getAllThought,
-    createThought,
     getThoughtById,
+    createThought,
     updateThought,
     deleteThought,
     addReaction,
-    removeReaction
+    deleteReaction
 } = require('../../controllers/thought-controller');
 
 
@@ -15,35 +14,36 @@ const {
 router  
     .route('/')
     .get(getAllThought)
-    .post(createThought);
+    .post(createThought); // Requires JSON: 
+    // {
+    //     "thoughtText": "A brand new thought!"
+    //     "username": "JohnSmith"
+    // }
 
 
 // GET, PUT, DELETE routes for /api/thoughts/:thoughtId
 router
     .route('/:thoughtId')
     .get(getThoughtById)
-    // updateThought JSON:
+    .put(updateThought) // Requires JSON: 
     // {
-    //     "thoughtText": ""
-    //     "username": ""
+    //     "thoughtText": "Fill out updated thought text here!"
+    //     "username": "JohnSmith"
     // }
-    .put(updateThought)
     .delete(deleteThought)
 
 
 // POST, DELETE routes for /api/thoughts/:thoughtId/reactions
 router  
     .route('/:thoughtId/reactions')
-    // addReaction JSON:
+    .post(addReaction) // Requires JSON: 
     // {
-    //     "reactionBody": "",
-    //     "username": ""
+    //     "reactionBody": "WOW",
+    //     "username": "JohnSmith"
     // }
-    .post(addReaction)
-    // removeReaction JSON: 
+    .delete(deleteReaction); // Requires JSON: 
     // {
     //     "reactionId": "612d3bc1a3bd2b9734711878"
     // }
-    .delete(removeReaction);
 
 module.exports = router;

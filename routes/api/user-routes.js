@@ -1,5 +1,4 @@
 const router = require('express').Router();
-// destructure methods from user controller object 
 const {
     getAllUser,
     getUserById,
@@ -15,14 +14,22 @@ const {
 router  
     .route('/')
     .get(getAllUser)
-    .post(createUser);
+    .post(createUser); // Requires JSON: 
+    // {
+    //     "username": "JohnSmith",
+    //     "email": "johnny@gmail.com"
+    // }
 
 
 // GET, PUT, DELETE routes for /api/users/:id
 router
     .route('/:id')
     .get(getUserById)
-    .put(updateUser)
+    .put(updateUser) // Requires JSON: 
+    // {
+    //     "username": "JohnSmith",
+    //     "email": "johns@gmail.com"
+    // }
     .delete(deleteUser);
 
 

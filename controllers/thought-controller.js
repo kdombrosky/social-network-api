@@ -21,8 +21,7 @@ const thoughtController = {
     // Expects:
     // {
     //     "thoughtText": ""
-    //     "username": "",
-    //     "userId": ""
+    //     "username": ""
     // }
     createThought({ body }, res) {
         Thought.create(body)
@@ -146,7 +145,7 @@ const thoughtController = {
     // {
     //     "reactionId": "612d3bc1a3bd2b9734711878"
     // }
-    removeReaction({ params, body }, res) {
+    deleteReaction({ params, body }, res) {
         Thought.findOneAndUpdate(
             { _id: params.thoughtId },
             // MongoDB $pull operator to remove specific reaction from reactions array

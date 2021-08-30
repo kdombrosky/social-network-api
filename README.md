@@ -24,15 +24,15 @@ Link to walkthrough:
 ## Installation 
 1. Clone the repo 
 2. Open terminal at root directory of app
-3. Run "npm i" to install necessary dependencies
+3. Run `npm i` to install necessary dependencies
 
 ## Usage
 Once all dependencies have finished installing:
-1. Run "npm start" in the terminal at the root directory 
-2. Open the Insomnia App 
-3. Use the provided comments in `./routes/api/thought-routes.js` and `./routes/api/thought-routes.js` to enter the routes and fill out the provided examples of JSON Body if necessary into Insomnia. 
+1. Run `npm start` in the terminal at the root directory 
+2. Open the `Insomnia App`
+3. Use the provided comments in `./routes/api/thought-routes.js` and `./routes/api/user-routes.js` to enter the `routes` and fill out the provided examples of `JSON Body` if necessary into Insomnia. 
 4. Perform the necessary CRUD operations for users, thoughts, and reactions! 
 
 ## Contributing
-This project was made by Kayla Dombrosky 8/2021 <br/>
+This project was made by `Kayla Dombrosky 8/2021` <br/>
 My GitHub: [kdombrosky](https://github.com/kdombrosky) 
