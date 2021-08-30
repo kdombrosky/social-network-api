@@ -1,13 +1,3 @@
-// const {
-//     getAllThought, (TESTED)
-//     getThoughtById, (TESTED)
-//     createThought, (TESTED)
-//     updateThought, (TESTED)
-//     deleteThought, (TESTED)
-//     addReaction, (TESTED)
-//     removeReaction (NO LONGER WORKING)
-// } 
-
 const { Thought, User } = require('../models');
 
 
@@ -154,16 +144,23 @@ const thoughtController = {
     // DELETE reaction /api/thoughts/:thoughtId/reactions
     // Expects:
     // {
+    //     Must match "reactionId" of reaction, not objectId
     //     "reactionId": "612d3bc1a3bd2b9734711878"
     // }
     removeReaction({ params, body }, res) {
         Thought.findOneAndUpdate(
             { _id: params.thoughtId },
             // MongoDB $pull operator to remove specific reaction from reactions array
-            { $pull: { reactions: { reactionId: body.reactionId } } },
+            { $pull: { reactions: body } },
             { new: true, runValidators: true }
         )
-        .then(dbThoughtData => res.json(dbThoughtData))
+        .then(dbThoughtData => {
+            if (!dbThoughtData) {
+                res.status(404).json({ message: 'No thought found with this id!' });
+                return;
+            }
+            res.json(dbThoughtData);
+        })
         .catch(err => res.json(err));
     }
 }

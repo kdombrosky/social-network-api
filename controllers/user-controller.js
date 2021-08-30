@@ -1,13 +1,4 @@
-// const {
-//     getAllUser, (TESTED)
-//     getUserById, (TESTED)
-//     createUser, (TESTED)
-//     updateUser, (TESTED)
-//     deleteUser, (TESTED)
-//     addFriend,
-//     deleteFriend
-// } 
-
+// Import Thought for future development
 const { User, Thought } = require('../models');
 
 const userController = {
@@ -90,8 +81,8 @@ const userController = {
         .catch(err => res.status(400).json(err));
     },
 
-    // POST or PUT? 
-    // ADD friend to user by id  /api/users/:userId/friends/:friendId
+
+    // POST friend to user by id  /api/users/:userId/friends/:friendId
     addFriend({ params }, res) {
         // add friendId to user's 'friends' array
         User.findOneAndUpdate(
@@ -141,9 +132,8 @@ const userController = {
                 res.status(404).json({ message: 'No user found with this id' });
                 return;
             }
-            // add userId to friend's 'friends' array
+            // remove userId from friends's 'friends' array
             User.findOneAndUpdate(
-                // can i use params or does it have to come from dbUserData
                 { _id: params.friendId },
                 { $pull: { friends: params.userId } },
                 { new: true, runValidators: true }
