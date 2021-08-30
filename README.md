@@ -17,7 +17,7 @@ This is the back-end for a social networking app, made with NoSQL and MongoDB. T
 - See all Thoughts
 - See all Users 
 <br/>
-Link to walkthrough: 
+Link to walkthrough: https://drive.google.com/file/d/1sMwRmSIuk5-cC7ixuBIige8WJ6OzTBby/view 
 <br/><br/>
 
 ## Installation 
