@@ -1,14 +1,14 @@
 // const {
-//     getAllUser, (DONE)
-//     getUserById, (DONE)
-//     createUser, (DONE)
-//     updateUser, (DONE)
-//     deleteUser, (DONE)
+//     getAllUser, (TESTED)
+//     getUserById, (TESTED)
+//     createUser, (TESTED)
+//     updateUser, (TESTED)
+//     deleteUser, (TESTED)
 //     addFriend,
 //     deleteFriend
 // } 
 
-const { User } = require('../models');
+const { User, Thought } = require('../models');
 
 const userController = {
     // GET all users /api/users
@@ -25,7 +25,12 @@ const userController = {
     },
     
 
-    // CREATE new user  /api/users
+    // POST new user  /api/users
+    // Expects:
+    // {
+    //     "username": "",
+    //     "email": ""
+    // }
     createUser({ body }, res) {
         User.create(body)
         .then(dbUserData => res.json(dbUserData))
@@ -51,8 +56,12 @@ const userController = {
     },
 
 
-    // UPDATE user by id  /api/users/:id
-    // update thoughts as well? 
+    // PUT user by id  /api/users/:id
+    // Expects:
+    // {
+    //     "username": "",
+    //     "email": ""
+    // }
     updateUser({ params, body }, res) {
         User.findOneAndUpdate(
             { _id: params.id }, 
@@ -64,6 +73,8 @@ const userController = {
                 res.status(404).json({ message: 'No user found with this id!' });
                 return;
             }
+            // Should update username on associated thoughts
+            
             res.json(dbUserData);
         })
         .catch(err => res.status(400).json(err));
@@ -77,9 +88,9 @@ const userController = {
         .catch(err => res.status(400).json(err));
     },
 
-
+    // POST or PUT? 
     // ADD friend to user by id  /api/users/:userId/friends/:friendId
-    addFriend() {
+    addFriend({ params }, res) {
         // add friendId to user's 'friends' array
         User.findOneAndUpdate(
             { _id: params.userId },
@@ -92,6 +103,7 @@ const userController = {
                 res.status(404).json({ message: 'No user found with this id' });
                 return;
             }
+
             // add userId to friend's 'friends' array
             User.findOneAndUpdate(
                 { _id: params.friendId },
@@ -114,10 +126,38 @@ const userController = {
 
 
     // DELETE friend from user by id  /api/users/:userId/friends/:friendId
-    // remove friendid from user's friend's array
-    // remove user's id from friend's friends array
-    removeFriend() {
+    removeFriend({ params }, res) {
+        // remove friendId from user's 'friends' array
+        User.findOneAndUpdate(
+            { _id: params.userId },
+            // push friend's username to user's 'friends' array
+            { $pull: { friends: params.friendId } },
+            { new: true, runValidators: true }
+        )
+        .then(dbUserData => {
+            if (!dbUserData) {
+                res.status(404).json({ message: 'No user found with this id' });
+                return;
+            }
+            // add userId to friend's 'friends' array
+            User.findOneAndUpdate(
+                // can i use params or does it have to come from dbUserData
+                { _id: params.friendId },
+                { $push: { friends: params.userId } },
+                { new: true, runValidators: true }
+            )
+            .then(dbFriendData => {
+                if(!dbFriendData) {
+                    res.status(404).json({ message: 'No user found with this id' })
+                    return;
+                }
 
+                // send back user data to show user's friend list
+                res.json(dbUserData);
+            })
+            .catch(err => res.json(err));
+        })
+        .catch(err => res.json(err));
     }
 }
 

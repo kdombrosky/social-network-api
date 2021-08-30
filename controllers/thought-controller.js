@@ -1,11 +1,11 @@
 // const {
-//     getAllThought, (DONE)
-//     getThoughtById, (DONE)
-//     createThought, (DONE)
-//     updateThought, (DONE? )
-//     deleteThought, (DONE)
-//     addReaction, (DONE)
-//     removeReaction (DONE)
+//     getAllThought, (TESTED)
+//     getThoughtById, (TESTED)
+//     createThought, (TESTED)
+//     updateThought, (TESTED)
+//     deleteThought, (TESTED)
+//     addReaction, (TESTED)
+//     removeReaction (TESTED)
 // } 
 
 const { Thought, User } = require('../models');
@@ -15,6 +15,10 @@ const thoughtController = {
     // GET all thoughts /api/thoughts
     getAllThought(req, res) {
         Thought.find({})
+        .populate({
+            path: 'reactions',
+            select: '-__v'
+        })
         .select('-__v')
         // Mongoose sort method in DESC order by id
         // need to sort by created at 
@@ -27,23 +31,28 @@ const thoughtController = {
     },
 
 
-    // CREATE new thought  /api/thoughts
-    createThought({ params, body }, res) {
-        console.log(body);
+    // POST new thought  /api/thoughts
+    // Expects:
+    // {
+    //     "thoughtText": ""
+    //     "username": "",
+    //     "userId": ""
+    // }
+    createThought({ body }, res) {
         Thought.create(body)
-        .then(({ username }) => {
+        .then(dbThoughtData => {
             // return User Promise so we can do something with the results
             return User.findOneAndUpdate(
-                { username: params.username },
+                { username: body.username },
                 // push Thought's id to user's thoughts array
-                { $push: { thoughts: _id } },
+                { $push: { thoughts: dbThoughtData._id } },
                 // to receive back the updated User with new comment
-                { new: true }
+                { new: true, runValidators: true }
             );
         })
         .then(dbUserData => {
             if (!dbUserData) {
-                res.status(404).json({ message: 'No user found with this id!' });
+                res.status(404).json({ message: 'No user found with this username!' });
                 return;
             }
             res.json(dbUserData);
@@ -56,9 +65,13 @@ const thoughtController = {
     getThoughtById({ params }, res) {
         Thought.findOne({ _id: params.thoughtId })
         .select('-__v')
+        .populate({
+            path: 'reactions',
+            select: '-__v'
+        })
         .then(dbThoughtData => {
             if (!dbThoughtData) {
-                res.status(404).json({ message: 'No Thought found with this id' });
+                res.status(404).json({ message: 'No thought found with this id' });
                 return;
             }
             res.json(dbThoughtData);
@@ -70,12 +83,17 @@ const thoughtController = {
     },
 
 
-    // UPDATE thought by id /api/thoughts/:thoughtId
+    // PUT Thought by id /api/thoughts/:thoughtId
+    // Expects:
+    // {
+    //     "thoughtText": ""
+    //     "username": ""
+    // }
     updateThought({ params, body }, res) {
         Thought.findOneAndUpdate(
             { _id: params.thoughtId },
             body,
-            { new: true }
+            { new: true, runValidators: true }
         )
         .then(dbThoughtData => {
             if (!dbThoughtData) {
@@ -117,13 +135,18 @@ const thoughtController = {
     },
 
 
-    // CREATE new reaction /api/thoughts/:thoughtId/reactions
+    // POST new reaction /api/thoughts/:thoughtId/reactions
+    // Expects:
+    // {
+    //     "reactionBody": "",
+    //     "username": ""
+    // }
     addReaction({ params, body }, res) {
         Thought.findOneAndUpdate(
             { _id: params.thoughtId },
             // Mongo $push method to push reaction into reactions array property of thought
             { $push: { reactions: body } },
-            { new: true }
+            { new: true, runValidators: true }
         )
         .then(dbThoughtData => {
             if (!dbThoughtData) {
@@ -137,12 +160,16 @@ const thoughtController = {
 
 
     // DELETE reaction /api/thoughts/:thoughtId/reactions
+    // Expects:
+    // {
+    //     "reactionId": "612d3bc1a3bd2b9734711878"
+    // }
     removeReaction({ params, body }, res) {
         Thought.findOneAndUpdate(
             { _id: params.thoughtId },
             // MongoDB $pull operator to remove specific reaction from reactions array
             { $pull: { reactions: { reactionId: body.reactionId } } },
-            { new: true }
+            { new: true, runValidators: true }
         )
         .then(dbThoughtData => res.json(dbThoughtData))
         .catch(err => res.json(err));
