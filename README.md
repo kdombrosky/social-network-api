@@ -5,7 +5,6 @@
 * [Installation](#installation)
 * [Usage](#usage)
 * [Contributing](#contributing)
-<br/>
 
 ## Description 
 This is the back-end for a social networking app, made with NoSQL and MongoDB. This will allow users to perform most of the necessary functions for a social media: 
