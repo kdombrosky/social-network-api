@@ -10,7 +10,7 @@ const {
 } = require('../../controllers/thought-controller');
 
 
-// GET and POST routes for /api/thoughts
+// GET and POST routes for thoughts: /api/thoughts
 router  
     .route('/')
     .get(getAllThought)
@@ -21,19 +21,18 @@ router
     // }
 
 
-// GET, PUT, DELETE routes for /api/thoughts/:thoughtId
+// GET, PUT, DELETE routes for thoughts by ID: /api/thoughts/:thoughtId
 router
     .route('/:thoughtId')
     .get(getThoughtById)
     .put(updateThought) // Requires JSON: 
     // {
     //     "thoughtText": "Fill out updated thought text here!"
-    //     "username": "JohnSmith"
     // }
     .delete(deleteThought)
 
 
-// POST, DELETE routes for /api/thoughts/:thoughtId/reactions
+// POST, DELETE routes for reactions on thoughts: /api/thoughts/:thoughtId/reactions
 router  
     .route('/:thoughtId/reactions')
     .post(addReaction) // Requires JSON: 

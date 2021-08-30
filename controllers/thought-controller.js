@@ -68,7 +68,6 @@ const thoughtController = {
     // Expects:
     // {
     //     "thoughtText": ""
-    //     "username": ""
     // }
     updateThought({ params, body }, res) {
         Thought.findOneAndUpdate(
